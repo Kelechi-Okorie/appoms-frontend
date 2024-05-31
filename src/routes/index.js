@@ -5,7 +5,7 @@ import {
     Group,
     Button,
     Box,
-    Container, Title, Text, TextInput, Image
+    Container, Title, Text
 } from '@mantine/core';
 import classes from './HeaderMegaMenu.module.css';
 
