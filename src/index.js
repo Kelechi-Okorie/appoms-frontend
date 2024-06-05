@@ -27,11 +27,16 @@ import Users from './routes/dashboard/users';
 import Index from './routes/index';
 import SignIn from './routes/signin';
 import SignUp from './routes/signup';
+import {UserRoot} from './routes/userRoot';
+import Profile from './routes/profile';
+import Account from './routes/account';
+import UserDetails from './routes/userDetails';
 
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import profile from './routes/profile';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +59,15 @@ const router = createBrowserRouter([
       { path: "users", element: <Users /> }
     ]
   },
+  {
+    path: "/user",
+    element: <UserRoot />,
+    children: [
+      {path: "profile", element: <Profile />},
+      {path: "account", element: <Account />}
+    ]
+  },
+  {path: "/user-details/:id", element: <UserDetails />},
 ]);
 
 const queryClient = new QueryClient();

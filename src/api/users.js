@@ -11,14 +11,14 @@ const getAllUser = async () => {
         const token = getToken();
 
         // Set the admin token as a cookie using nookies
-        setCookie(null, 'token', "fsfskfjljllj", {
+        setCookie(null, 'token', token, {
             maxAge: 18000,
             path: '/',
         });
 
         const config = {
             headers: {
-                Authorization: "tosfsfasfsken",
+                Authorization: token,
                 Accept: 'application/json',
             },
         };
@@ -43,6 +43,45 @@ export const useGetAllUser = () => {
     const { data, isLoading, error } = useQuery({ queryKey: ['getAllUser'], queryFn: getAllUser });
     // const queryClient = useQueryClient(); // it update the table by refetching it from the server
     // queryClient.invalidateQueries(['getAllUser']);
+    return { data, isLoading, error };
+};
+
+
+// GET SINGLE USERS
+const getUser = async (id) => {
+    try {
+        const token = getToken();
+
+        // Set the admin token as a cookie using nookies
+        setCookie(null, 'token', token, {
+            maxAge: 18000,
+            path: '/',
+        });
+
+        const config = {
+            headers: {
+                Authorization: token,
+                Accept: 'application/json',
+            },
+        };
+
+        const response = await axios.get(`${BASEURL}/api/v1/users/${id}`, config);
+
+        const data = response.data;
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+/**
+ * Custom hook that fetches user data from the server.
+ * @returns {{data: any, isLoading: boolean, error: any}} An object with user data, loading state, and error.
+ */
+
+export const useGetUser = (id) => {
+    const { data, isLoading, error } = useQuery({ queryKey: ['getUser', id], queryFn: getUser });
     return { data, isLoading, error };
 };
 

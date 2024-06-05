@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../helpers/getToken';
 import ProvidersList from '../components/providers/ProvidersList';
+import { useGetAllUser } from '../api/users';
 
 import {
     Group,
@@ -14,6 +15,8 @@ import classes from './HeaderMegaMenu.module.css';
 export default function Index(props) {
 
     const token = getToken();
+    const { data, isLoading, error } = useGetAllUser();
+
 
     return (
         <>
@@ -75,9 +78,14 @@ export default function Index(props) {
                             </Button>
                         </div>
                     </div>
-                    
+
                     <div>
-                        <ProvidersList />
+                        {isLoading
+                            ?
+                            <div>Loading...</div>
+                            :
+                            <ProvidersList providers={data.data.users}/>
+                        }
                     </div>
                 </Container>
 

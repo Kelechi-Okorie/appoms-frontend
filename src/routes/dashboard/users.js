@@ -7,8 +7,6 @@ export default function Users(props) {
 
     const { data, isLoading, error } = useGetAllUser();
 
-    console.log(data)
-
     return (
         <>
             <div className="flex items-center">
