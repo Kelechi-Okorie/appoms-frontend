@@ -9,6 +9,7 @@ import {
     AlertDescription,
 } from '@chakra-ui/react'
 import { Button, Group, TextInput } from '@mantine/core';
+import { FaRegEye } from "react-icons/fa";
 import {
     Box,
     Text
@@ -37,6 +38,7 @@ export const postLogin = async ({ email, password }) => {
 export default function SignIn() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
 
 
     const navigate = useNavigate();
@@ -70,7 +72,7 @@ export default function SignIn() {
                 maxAge: 18000,
             });
 
-            navigate('/dashboard')
+            navigate('/')
         },
         onError: (error) => {
             console.log('has failed', error);
@@ -135,11 +137,18 @@ export default function SignIn() {
                         />
                         <TextInput
                             // withAsterisk
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             label="Password"
                             placeholder="***********"
                             key={form.key('password')}
                             {...form.getInputProps('password')}
+                            rightSection={
+                                <FaRegEye
+                                    aria-label="Clear input"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    // style={{ cursor: 'pointer' }}
+                                />
+                            }
                         />
 
                         <Group justify="flex-end" mt="md">

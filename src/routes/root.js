@@ -1,9 +1,16 @@
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom';
 import { destroyCookie } from 'nookies';
 
-import { AppShell, Burger, Group, Skeleton, Text, Button } from '@mantine/core';
+import { AppShell, Burger, Group, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-// import { MantineLogo } from '@mantinex/mantine-logo';
+import { FaRegUserCircle } from "react-icons/fa";
+
+import {
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+} from '@chakra-ui/react'
 
 export function Root() {
     const [opened, { toggle }] = useDisclosure();
@@ -11,7 +18,6 @@ export function Root() {
     const navigate = useNavigate();
 
     const navElements = [
-        { label: 'Dashboard', icon: 'home', to: '/dashboard' },
         { label: 'Users', icon: 'home', to: '/dashboard/users' },
     ];
 
@@ -29,12 +35,28 @@ export function Root() {
             <AppShell.Header>
                 <Group h="100%" px="md">
                     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-                    {/* <MantineLogo size={30} /> */}
                     <Link to="/">
                         <Text fw={700}>APPOMS</Text>
                     </Link>
 
-                    <Button ml="auto" onClick={handleLogout}>Log out</Button>
+                    <div className="ml-auto cursor-pointer">
+                        {/* <FaRegUserCircle
+
+                        /> */}
+                        <Menu>
+                            <MenuButton rightIcon={<FaRegUserCircle />}>
+                                <FaRegUserCircle />
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem>
+                                    <Link to="/dashboard">Dashboard</Link>
+                                </MenuItem>
+                                <MenuItem>
+                                    <span ml-2 onClick={handleLogout}>Log out</span>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </div>
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">

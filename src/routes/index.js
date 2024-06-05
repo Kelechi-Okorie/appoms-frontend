@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getToken } from '../helpers/getToken';
+import ProvidersList from '../components/providers/ProvidersList';
 
 import {
     Group,
@@ -11,9 +13,11 @@ import classes from './HeaderMegaMenu.module.css';
 
 export default function Index(props) {
 
+    const token = getToken();
+
     return (
         <>
-            <Box pb={120} mb={120}>
+            <Box pb={30} mb={30}>
                 <header className={classes.header}>
                     <Group justify="space-between" h="100%">
 
@@ -23,18 +27,27 @@ export default function Index(props) {
                             </Link>
                         </Group>
 
-                        <Group visibleFrom="sm">
+                        {token ?
                             <Button variant="default">
-                                <Link to="/signin" className={classes.link}>
-                                    Log in
+                                <Link to="/dashboard" className={classes.link}>
+                                    Dashboard
                                 </Link>
                             </Button>
-                            <Button>
-                                <Link to="/signup" className={classes.link}>
-                                    Sign up
-                                </Link>
-                            </Button>
-                        </Group>
+
+                            :
+                            <Group visibleFrom="sm">
+                                <Button variant="default">
+                                    <Link to="/signin" className={classes.link}>
+                                        Log in
+                                    </Link>
+                                </Button>
+                                <Button>
+                                    <Link to="/signup" className={classes.link}>
+                                        Sign up
+                                    </Link>
+                                </Button>
+                            </Group>
+                        }
                     </Group>
                 </header>
             </Box>
@@ -62,8 +75,14 @@ export default function Index(props) {
                             </Button>
                         </div>
                     </div>
+                    
+                    <div>
+                        <ProvidersList />
+                    </div>
                 </Container>
+
             </div>
+
 
         </>
     );
