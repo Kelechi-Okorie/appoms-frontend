@@ -34,6 +34,7 @@ import UserDetails from './routes/userDetails';
 import Categories from './routes/dashboard/categories';
 import Services from './routes/dashboard/services';
 import CategoryDetails from './routes/dashboard/categoryDetails';
+import NewCategory from './routes/dashboard/newCategory';
 
 import {
   createBrowserRouter,
@@ -59,8 +60,9 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "users", element: <Users /> },
+      {path: "users", element: <Users /> },
       {path: "categories", element: <Categories />},
+      {path: "new-category", element: <NewCategory />},
       {path: "category-details/:id", element: <CategoryDetails />},
       {path: "services", element: <Services />},    
     ]

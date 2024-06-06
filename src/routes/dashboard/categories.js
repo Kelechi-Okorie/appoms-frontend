@@ -14,7 +14,9 @@ export default function Users(props) {
         <>
             <div className="flex items-center">
                 <h1>Categories</h1>
-                <Button variant="filled" className="ml-auto">New</Button>
+                <Button variant="filled" className="ml-auto">
+                    <Link to="/dashboard/new-category">New</Link>
+                    </Button>
             </div>
 
             <div>
