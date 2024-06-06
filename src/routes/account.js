@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Image, Text, Badge, Button, Group, NativeSelect, Chip } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, NativeSelect, Chip, Textarea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { FaCircleUser } from "react-icons/fa6";
 import { getToken } from '../helpers/getToken';
@@ -14,8 +14,13 @@ import {
 } from '@tanstack/react-query';
 import * as _ from 'underscore';
 
-export const postUserServices = async (formData) => {
+const postUserServices = async (formData) => {
     const response = await axios.post(`${BASEURL}/api/v1/users/services`, formData);
+    return response.data;
+};
+
+const postDescription = async (formData) => {
+    const response = await axios.post(`${BASEURL}/api/v1/users/add-description`, formData);
     return response.data;
 };
 
@@ -29,7 +34,13 @@ export default function Account(props) {
     const [services, setServices] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
 
+    const descriptionForm = useForm({
+        // mode: 'uncontrolled',
+        initialValues: {
+            description: '',
+        },
 
+    });
 
     useEffect(() => {
         const token = getToken();
@@ -44,10 +55,19 @@ export default function Account(props) {
     const { data: categoriesData } = useGetAllCategories();
     const { data: categoryServicesData } = useGetCategoryServices(selectedCategory?.id || '');
 
-
-
     const servicesMutation = useMutation({
         mutationFn: postUserServices,
+        onSuccess: (data) => {
+            console.log('has succedded', data);
+            navigate('/user/profile');
+        },
+        onError: (error) => {
+            console.log('has failed', error);
+        }
+    });
+
+    const descriptionMutation = useMutation({
+        mutationFn: postDescription,
         onSuccess: (data) => {
             console.log('has succedded', data);
             navigate('/user/profile');
@@ -102,6 +122,23 @@ export default function Account(props) {
         setIsSubmitting(false);
     };
 
+    const handleSubmitDescription = (evt) => {
+        evt.preventDefault();
+
+        const currentUser = getCurrentUser()
+
+        const requestData = {description: descriptionForm.values.description, userId: currentUser.id};
+        setIsSubmitting(true);
+        try {
+            // Mutations
+            descriptionMutation.mutate(requestData);
+            setHasSucceded(true);
+        } catch (error) {
+            console.log(error);
+        }
+        setIsSubmitting(false);
+    };
+
     return (
         <>
             <div className="mb-5">
@@ -116,6 +153,34 @@ export default function Account(props) {
                         <Text size="sm" weight={500}>{userData?.data.user.email}</Text>
                         <Text size="sm" weight={500}>{userData?.data.user.phone}</Text>
                     </div>
+                </div>
+            </Card>
+
+            <Card shadow="sm" padding="lg" radius="md" withBorder className='mb-6'>
+                <div><h1>Describe yourself professionally</h1></div>
+
+                <div>
+                <form /* onSubmit={onSubmit} */>
+
+                        <Textarea
+                            withAsterisk
+                            label="Description"
+                            placeholder="Description"
+                            key={descriptionForm.key('description')}
+                            {...descriptionForm.getInputProps('description')}
+                            minRows={10}
+                        />
+
+                        <Group justify="flex-end" mt="md">
+                            <Button
+                                type="submit"
+                                onClick={handleSubmitDescription}
+                            >
+                                Submit
+                            </Button>
+                        </Group>
+                    </form>
+
                 </div>
             </Card>
 

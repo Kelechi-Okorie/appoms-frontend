@@ -56,6 +56,11 @@ export default function SignUp() {
                 path: '/',
                 maxAge: 18000,
             });
+            setCookie(null, 'user', JSON.stringify(data.data.user), {
+                path: '/',
+                maxAge: 18000,
+            });
+
             navigate('/');
         },
     })
