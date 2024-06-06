@@ -45,7 +45,7 @@ export function UserRoot() {
 
                         /> */}
                         <Menu>
-                            <MenuButton rightIcon={<FaRegUserCircle />}>
+                            <MenuButton>
                                 <FaRegUserCircle />
                             </MenuButton>
                             <MenuList>
