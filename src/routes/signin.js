@@ -14,7 +14,7 @@ import {
     Box,
     Text
 } from '@mantine/core';
-import classes from './HeaderMegaMenu.module.css';
+import classes from '../styles/HeaderMegaMenu.module.css';
 
 import { useForm } from '@mantine/form';
 import axios from 'axios';

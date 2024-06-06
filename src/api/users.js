@@ -65,6 +65,8 @@ const getUser = async (id) => {
             },
         };
 
+        console.log('the id is', id)
+
         const response = await axios.get(`${BASEURL}/api/v1/users/${id}`, config);
 
         const data = response.data;
@@ -81,7 +83,7 @@ const getUser = async (id) => {
  */
 
 export const useGetUser = (id) => {
-    const { data, isLoading, error } = useQuery({ queryKey: ['getUser', id], queryFn: getUser });
+    const { data, isLoading, error } = useQuery({ queryKey: ['getUser', id], queryFn: () => getUser(id) });
     return { data, isLoading, error };
 };
 

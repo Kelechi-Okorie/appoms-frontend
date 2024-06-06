@@ -6,7 +6,7 @@ import {
     Text
 } from '@mantine/core';
 import { FaRegEye } from "react-icons/fa";
-import classes from './HeaderMegaMenu.module.css';
+import classes from '../styles/HeaderMegaMenu.module.css';
 
 import { useForm } from '@mantine/form';
 import axios from 'axios';

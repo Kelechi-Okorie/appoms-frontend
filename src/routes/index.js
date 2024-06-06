@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getToken } from '../helpers/getToken';
 import ProvidersList from '../components/providers/ProvidersList';
 import { useGetAllUser } from '../api/users';
+import Header from '../components/Header';
 
 import {
     Group,
@@ -10,7 +11,7 @@ import {
     Box,
     Container, Title, Text
 } from '@mantine/core';
-import classes from './HeaderMegaMenu.module.css';
+import classes from '../styles/HeaderMegaMenu.module.css';
 
 export default function Index(props) {
 
@@ -20,40 +21,7 @@ export default function Index(props) {
 
     return (
         <>
-            <Box pb={30} mb={30}>
-                <header className={classes.header}>
-                    <Group justify="space-between" h="100%">
-
-                        <Group h="100%" gap={0} visibleFrom="sm">
-                            <Link to="/" className={classes.link}>
-                                <Text fw={700}>APPOMS</Text>
-                            </Link>
-                        </Group>
-
-                        {token ?
-                            <Button variant="default">
-                                <Link to="/dashboard" className={classes.link}>
-                                    Dashboard
-                                </Link>
-                            </Button>
-
-                            :
-                            <Group visibleFrom="sm">
-                                <Button variant="default">
-                                    <Link to="/signin" className={classes.link}>
-                                        Log in
-                                    </Link>
-                                </Button>
-                                <Button>
-                                    <Link to="/signup" className={classes.link}>
-                                        Sign up
-                                    </Link>
-                                </Button>
-                            </Group>
-                        }
-                    </Group>
-                </header>
-            </Box>
+            <Header />
 
             <div className={classes.root}>
                 <Container size="lg">
@@ -84,7 +52,7 @@ export default function Index(props) {
                             ?
                             <div>Loading...</div>
                             :
-                            <ProvidersList providers={data.data.users}/>
+                            <ProvidersList providers={data.data.users} />
                         }
                     </div>
                 </Container>
