@@ -1,52 +1,37 @@
 
+import { Link } from 'react-router-dom';
 import { Button, Table, Box } from '@mantine/core';
 
-import { useGetAllUser } from '../../api/users';
+import { useGetAllServices } from '../../api/services';
 
-export default function Users(props) {
+export default function Services(props) {
 
-    const { data, isLoading, error } = useGetAllUser();
+    const { data, isLoading, error } = useGetAllServices();
+    console.log(data)
 
     return (
         <>
             <div className="flex items-center">
-                <h1>Users</h1>
-                <Button variant="filled" className="ml-auto">New</Button>
+                <h1>Service</h1>
+                <Button variant="filled" className="ml-auto">
+                    <Link to="/dashboard/new-service">New</Link>
+                </Button>
             </div>
 
             <div>
-
-                <div>
-                    <Box
-                        sx={(theme) => ({
-                            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-                            textAlign: 'center',
-                            padding: theme.spacing.xl,
-                            borderRadius: theme.radius.md,
-                            cursor: 'pointer',
-
-                            '&:hover': {
-                                backgroundColor:
-                                    theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-                            },
-                        })}
-                    >
-                        Box lets you add inline styles with sx prop
-                    </Box>
-                </div>
                 <div>
                     <Table striped>
                         <Table.Thead>
                             <Table.Tr>
                                 <Table.Th>#</Table.Th>
                                 <Table.Th>Name</Table.Th>
-                                <Table.Th>Email</Table.Th>
-                                <Table.Th>Phone</Table.Th>
+                                <Table.Th>Category</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
-                            {data?.data?.users?.map((user, index) => {
-                                const { fullName, email, phone, isAdmin } = user;
+                            {data?.data?.services?.map((service, index) => {
+                                const { id, name, Category } = service;
+                                const { name: categoryName } = Category;
 
                                 return (
                                     <Table.Tr
@@ -61,9 +46,10 @@ export default function Users(props) {
                                         onClick={() => console.log('clicked')}
                                     >
                                         <Table.Td>{index + 1}</Table.Td>
-                                        <Table.Td>{fullName}</Table.Td>
-                                        <Table.Td>{email}</Table.Td>
-                                        <Table.Td>{phone}</Table.Td>
+                                        <Table.Td>
+                                            <Link to={`/dashboard/service-details/${id}`}>{name}</Link>
+                                        </Table.Td>
+                                        <Table.Td>{categoryName}</Table.Td>
                                     </Table.Tr>
                                 );
                             })}

@@ -2,19 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import {
-    Alert,
-    AlertIcon,
-    AlertTitle,
-    AlertDescription,
-} from '@chakra-ui/react'
-import { Button, Group, TextInput, Textarea } from '@mantine/core';
-import { FaRegEye } from "react-icons/fa";
-import {
-    Box,
-    Text
-} from '@mantine/core';
-// import classes from '../styles/HeaderMegaMenu.module.css';
+import { Button, Group, TextInput, Textarea, NativeSelect } from '@mantine/core';
 
 import { useForm } from '@mantine/form';
 import axios from 'axios';
@@ -22,30 +10,33 @@ import { setCookie } from 'nookies';
 
 import { BASEURL } from '../../constants/baseApiUrl';
 import { getToken } from '../../helpers/getToken';
+import { useGetAllCategories } from '../../api/categories';
+import PostSuccessModal from '../../components/modals/PostSuccessModal';
+import PostFailureModal from '../../components/modals/PostFailureModal';
 
 import {
     useMutation,
 } from '@tanstack/react-query';
-import PostSuccessModal from '../../components/modals/PostSuccessModal';
-import PostFailureModal from '../../components/modals/PostFailureModal';
 
-export const postCategory = async ({ name, description }) => {
-    const response = await axios.post(`${BASEURL}/api/v1/categories/new`, {
+export const postService = async ({ name, description, category }) => {
+    const response = await axios.post(`${BASEURL}/api/v1/services/new`, {
         name,
         description,
+        category
     });
     return response.data;
 };
 
-
-
-export default function NewCategory(props) {
+export default function NewService(props) {
 
     // const { data, isLoading, error } = useGetAllUser();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const [slowTransitionOpened, setSlowTransitionOpened] = useState(false);
+    const [category, setCategory] = useState('');
+    const [categories, setCategories] = useState([]);
     const [hasSucceded, setHasSucceded] = useState(false);
+
+    const { data: categoryData, isLoading: isCategoryLoading, isError: isCategoryError } = useGetAllCategories();
 
     const navigate = useNavigate();
 
@@ -62,27 +53,37 @@ export default function NewCategory(props) {
         initialValues: {
             name: '',
             description: '',
+            category: ''
         },
 
     });
 
+    useEffect(() => {
+
+        if (categoryData) {
+            form.setFieldValue('category', categoryData?.data?.categories[0].name);
+        }
+    }, [categoryData, form]);
+
+    const handleChangeCategory = (event) => {
+        setCategory(event.currentTarget.value);
+        form.setFieldValue('category', event.currentTarget.value);
+    };
+
     const mutation = useMutation({
-        mutationFn: postCategory,
+        mutationFn: postService,
         onSuccess: (data) => {
             console.log('has succedded', data);
             setCookie(null, 'token', data.data.token, {
                 path: '/',
                 maxAge: 18000,
             });
-
-            // navigate('/dashboard/categories')
         },
         onError: (error) => {
             console.log('has failed', error);
             setError(error.response.data.message);
         }
-    })
-
+    });
 
     const onSubmit = async (evt) => {
         evt.preventDefault();
@@ -90,13 +91,15 @@ export default function NewCategory(props) {
         setIsSubmitting(true);
         try {
             // Mutations
+            console.log(form.values, 'the forfm values')
             mutation.mutate(form.values);
             setHasSucceded(true);
+
         } catch (error) {
             console.log(error);
         }
         setIsSubmitting(false);
-    }
+    };
 
     const handleNew = () => {
         setHasSucceded(false);
@@ -111,7 +114,7 @@ export default function NewCategory(props) {
 
     const handleList = () => {
         setHasSucceded(false);
-        navigate('/dashboard/categories');
+        navigate('/dashboard/services');
     };
 
     const successActions = [
@@ -119,7 +122,6 @@ export default function NewCategory(props) {
         // {name: 'View', handler:  handleView},
         { name: 'List', handler: handleList }
     ]
-
 
     return (
         <>
@@ -130,6 +132,20 @@ export default function NewCategory(props) {
             <div style={{ paddingTop: '30px' }}>
                 <div style={{ maxWidth: '340px', marginLeft: 'auto', marginRight: 'auto' }}>
                     <form /* onSubmit={onSubmit} */>
+                        {/* <NativeSelect
+                            label="Input label"
+                            description="Input description"
+                            data={['React', 'Angular', 'Vue']}
+                            key={form.key('category')}
+                            {...form.getInputProps('category')}
+                        /> */}
+
+                        <NativeSelect
+                            value={category}
+                            onChange={handleChangeCategory}
+                            data={categoryData?.data?.categories.map((category) => category.name)}
+                        />
+
                         <TextInput
                             withAsterisk
                             label="Name"
@@ -151,6 +167,7 @@ export default function NewCategory(props) {
                             <Button
                                 type="submit"
                                 onClick={onSubmit}
+                                disabled={isSubmitting}
                             >
                                 Submit
                             </Button>
@@ -158,7 +175,6 @@ export default function NewCategory(props) {
                     </form>
                 </div>
             </div>
-
             <PostSuccessModal
                 title="Product Created Successfully"
                 actions={successActions}

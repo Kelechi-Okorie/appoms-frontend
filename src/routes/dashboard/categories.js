@@ -5,7 +5,7 @@ import { Button, Table, Box } from '@mantine/core';
 
 import { useGetAllCategories } from '../../api/categories';
 
-export default function Users(props) {
+export default function Categories(props) {
 
     // const { data, isLoading, error } = useGetAllUser();
     const { data, isLoading, error } = useGetAllCategories();
