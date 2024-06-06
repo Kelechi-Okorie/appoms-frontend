@@ -46,81 +46,42 @@ export const useGetAllCategories = () => {
     return { data, isLoading, error };
 };
 
-export const postLogin = async ({ email, password }) => {
-    const response = await axios.post(`${BASEURL}/api/v1/auth/login`, {
-        email,
-        password,
-    });
-    return response.data;
+// GET SINGLE USERS
+const getCategory = async (id) => {
+    try {
+        const token = getToken();
+
+        // Set the admin token as a cookie using nookies
+        setCookie(null, 'token', token, {
+            maxAge: 18000,
+            path: '/',
+        });
+
+        const config = {
+            headers: {
+                Authorization: token,
+                Accept: 'application/json',
+            },
+        };
+
+        console.log('the id is', id)
+
+        const response = await axios.get(`${BASEURL}/api/v1/categories/${id}`, config);
+
+        const data = response.data;
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 };
 
-export const UsePostLogin = () => {
-    const queryClient = useQueryClient();
+/**
+ * Custom hook that fetches user data from the server.
+ * @returns {{data: any, isLoading: boolean, error: any}} An object with user data, loading state, and error.
+ */
 
-    const mutation = useMutation({
-        mutationFn: postLogin,
-        onSuccess: () => {
-            // Invalidate and refresh
-            queryClient.invalidateQueries({ queryKey: 'getAllUser' });
-        }
-    });
-    // const loginUser = async (userData) => {
-    //     await mutation.mutate(userData);
-    // };
-
-    return {
-        // loginUser,
-        // isLoading,
-        // data,
-        // error,
-        // isSuccess,
-        mutation
-    };
+export const useGetCategory = (id) => {
+    const { data, isLoading, error } = useQuery({ queryKey: ['getCategory', id], queryFn: () => getCategory(id) });
+    return { data, isLoading, error };
 };
-
-export const postRegister = async ({ firstName, lastName, phone, email, password }) => {
-    const response = await axios.post(`${BASEURL}/api/v1/auth/register`, {
-        firstName,
-        lastName,
-        phone,
-        email,
-        password,
-    });
-    return response.data;
-};
-
-// hooks
-export const UsePostRegister = () => {
-    // const { mutate, data, isLoading, error, isError, isSuccess } =
-    //     useMutation(postRegister, {
-    //         onSuccess: (data) => console.log('successfull', data),
-    //         onError: (error) => console.log('an error occured', error)
-    //     });
-
-    // const queryClient = useQueryClient();
-
-    const mutation = useMutation({
-        mutationFn: postLogin,
-        // onSuccess: () => {
-        //     // Invalidate and refresh
-        //     queryClient.invalidateQueries({queryKey: 'getAllUser'});
-        // }
-    });
-
-    const registerUser = async (userData) => {
-        await mutation.mutate(userData);
-    };
-
-
-    return {
-        registerUser,
-        // isLoading,
-        // data,
-        // error,
-        // isError,
-        // isSuccess,
-        // mutation
-    };
-};
-
-

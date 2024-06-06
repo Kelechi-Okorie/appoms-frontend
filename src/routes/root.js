@@ -19,6 +19,9 @@ export function Root() {
 
     const navElements = [
         { label: 'Users', icon: 'home', to: '/dashboard/users' },
+        {label: "Categories", icon: "home", to: "/dashboard/categories"},
+        {label: "Services", icon: "home", to: "/dashboard/services"},
+        {label: "Providers", icon: "home", to: "/dashboard/providers"},
     ];
 
     const handleLogout = () => {
