@@ -15,6 +15,8 @@ import classes from '../styles/HeaderMegaMenu.module.css';
 export default function Header(props) {
     const token = getToken();
 
+    console.log(token, 'the token')
+
     return (
         <Box pb={30} mb={30}>
             <header className={classes.header}>
@@ -28,7 +30,7 @@ export default function Header(props) {
 
                     {token ?
                         <Button variant="default">
-                            <Link to="/dashboard" className={classes.link}>
+                            <Link to="/user/account" className={classes.link}>
                                 Dashboard
                             </Link>
                         </Button>

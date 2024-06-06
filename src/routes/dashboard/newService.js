@@ -74,10 +74,6 @@ export default function NewService(props) {
         mutationFn: postService,
         onSuccess: (data) => {
             console.log('has succedded', data);
-            setCookie(null, 'token', data.data.token, {
-                path: '/',
-                maxAge: 18000,
-            });
         },
         onError: (error) => {
             console.log('has failed', error);

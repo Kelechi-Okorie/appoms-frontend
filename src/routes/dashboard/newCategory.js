@@ -29,11 +29,18 @@ import {
 import PostSuccessModal from '../../components/modals/PostSuccessModal';
 import PostFailureModal from '../../components/modals/PostFailureModal';
 
-export const postCategory = async ({ name, description }) => {
-    const response = await axios.post(`${BASEURL}/api/v1/categories/new`, {
-        name,
-        description,
-    });
+export const postCategory = async (requestData) => {
+    const token = getToken();
+    const config = {
+        headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+            Accept: '*/*',
+            'X-Requested-With': 'XMLHttpRequest', // Workaround for some browsers
+        },
+    };
+
+    const response = await axios.post(`${BASEURL}/api/v1/user/services`, requestData, config);
     return response.data;
 };
 
@@ -70,10 +77,6 @@ export default function NewCategory(props) {
         mutationFn: postCategory,
         onSuccess: (data) => {
             console.log('has succedded', data);
-            setCookie(null, 'token', data.data.token, {
-                path: '/',
-                maxAge: 18000,
-            });
 
             // navigate('/dashboard/categories')
         },

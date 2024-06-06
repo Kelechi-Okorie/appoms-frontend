@@ -45,9 +45,8 @@ export default function SignIn() {
 
     useEffect(() => {
         const token = getToken();
-        console.log(token);
         if (token) {
-            navigate('/dashboard');
+            navigate('/user/acount');
         }
     }, [navigate]);
 
@@ -68,6 +67,11 @@ export default function SignIn() {
         onSuccess: (data) => {
             console.log('has succedded', data);
             setCookie(null, 'token', data.data.token, {
+                path: '/',
+                maxAge: 18000,
+            });
+
+            setCookie(null, 'user', JSON.stringify(data.data.user), {
                 path: '/',
                 maxAge: 18000,
             });
