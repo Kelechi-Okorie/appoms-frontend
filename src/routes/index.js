@@ -1,5 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getToken } from '../helpers/getToken';
+import ProvidersList from '../components/providers/ProvidersList';
+import { useGetAllUser } from '../api/users';
+import Header from '../components/Header';
 
 import {
     Group,
@@ -7,37 +11,17 @@ import {
     Box,
     Container, Title, Text
 } from '@mantine/core';
-import classes from './HeaderMegaMenu.module.css';
+import classes from '../styles/HeaderMegaMenu.module.css';
 
 export default function Index(props) {
 
+    const token = getToken();
+    const { data, isLoading, error } = useGetAllUser();
+
+
     return (
         <>
-            <Box pb={120} mb={120}>
-                <header className={classes.header}>
-                    <Group justify="space-between" h="100%">
-
-                        <Group h="100%" gap={0} visibleFrom="sm">
-                            <Link to="/" className={classes.link}>
-                                <Text fw={700}>APPOMS</Text>
-                            </Link>
-                        </Group>
-
-                        <Group visibleFrom="sm">
-                            <Button variant="default">
-                                <Link to="/signin" className={classes.link}>
-                                    Log in
-                                </Link>
-                            </Button>
-                            <Button>
-                                <Link to="/signup" className={classes.link}>
-                                    Sign up
-                                </Link>
-                            </Button>
-                        </Group>
-                    </Group>
-                </header>
-            </Box>
+            <Header />
 
             <div className={classes.root}>
                 <Container size="lg">
@@ -62,8 +46,19 @@ export default function Index(props) {
                             </Button>
                         </div>
                     </div>
+
+                    <div>
+                        {isLoading
+                            ?
+                            <div>Loading...</div>
+                            :
+                            <ProvidersList providers={data.data.users} />
+                        }
+                    </div>
                 </Container>
+
             </div>
+
 
         </>
     );

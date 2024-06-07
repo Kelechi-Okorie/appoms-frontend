@@ -27,11 +27,22 @@ import Users from './routes/dashboard/users';
 import Index from './routes/index';
 import SignIn from './routes/signin';
 import SignUp from './routes/signup';
+import {UserRoot} from './routes/userRoot';
+import Profile from './routes/profile';
+import Account from './routes/account';
+import UserDetails from './routes/userDetails';
+import Categories from './routes/dashboard/categories';
+import CategoryDetails from './routes/dashboard/categoryDetails';
+import NewCategory from './routes/dashboard/newCategory';
+import Services from './routes/dashboard/services';
+import ServiceDetails from './routes/dashboard/serviceDetails';
+import NewService from './routes/dashboard/newService';
 
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import profile from './routes/profile';
 
 const router = createBrowserRouter([
   {
@@ -51,9 +62,24 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "users", element: <Users /> }
+      {path: "users", element: <Users /> },
+      {path: "categories", element: <Categories />},
+      {path: "new-category", element: <NewCategory />},
+      {path: "category-details/:id", element: <CategoryDetails />},
+      {path: "services", element: <Services />},
+      {path: "service-details/:id", element: <ServiceDetails />},
+      {path: "new-service", element: <NewService />}   
     ]
   },
+  {
+    path: "/user",
+    element: <UserRoot />,
+    children: [
+      {path: "profile", element: <Profile />},
+      {path: "account", element: <Account />}
+    ]
+  },
+  {path: "/user-details/:id", element: <UserDetails />},
 ]);
 
 const queryClient = new QueryClient();

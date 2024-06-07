@@ -7,6 +7,8 @@ export default function Users(props) {
 
     const { data, isLoading, error } = useGetAllUser();
 
+    console.log(data)
+
     return (
         <>
             <div className="flex items-center">
@@ -15,6 +17,25 @@ export default function Users(props) {
             </div>
 
             <div>
+
+                <div>
+                    <Box
+                        sx={(theme) => ({
+                            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                            textAlign: 'center',
+                            padding: theme.spacing.xl,
+                            borderRadius: theme.radius.md,
+                            cursor: 'pointer',
+
+                            '&:hover': {
+                                backgroundColor:
+                                    theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
+                            },
+                        })}
+                    >
+                        Box lets you add inline styles with sx prop
+                    </Box>
+                </div>
                 <div>
                     <Table striped>
                         <Table.Thead>

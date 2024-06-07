@@ -12,16 +12,14 @@ import {
     MenuItem,
 } from '@chakra-ui/react'
 
-export function Root() {
+export function UserRoot() {
     const [opened, { toggle }] = useDisclosure();
 
     const navigate = useNavigate();
 
     const navElements = [
-        { label: 'Users', icon: 'home', to: '/dashboard/users' },
-        {label: "Categories", icon: "home", to: "/dashboard/categories"},
-        {label: "Services", icon: "home", to: "/dashboard/services"},
-        {label: "Providers", icon: "home", to: "/dashboard/providers"},
+        { label: 'Profile', icon: 'home', to: '/user/profile' },
+        { label: 'account', icon: 'home', to: '/user/account' }
     ];
 
     const handleLogout = () => {
@@ -47,7 +45,7 @@ export function Root() {
 
                         /> */}
                         <Menu>
-                            <MenuButton rightIcon={<FaRegUserCircle />}>
+                            <MenuButton>
                                 <FaRegUserCircle />
                             </MenuButton>
                             <MenuList>

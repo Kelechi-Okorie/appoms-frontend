@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button, Group, TextInput } from '@mantine/core';
 import {
     Box,
     Text
 } from '@mantine/core';
-import classes from './HeaderMegaMenu.module.css';
+import { FaRegEye } from "react-icons/fa";
+import classes from '../styles/HeaderMegaMenu.module.css';
 
 import { useForm } from '@mantine/form';
 import axios from 'axios';
@@ -28,6 +30,7 @@ export const postRegister = async ({ firstName, lastName, phone, email, password
 };
 
 export default function SignUp() {
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
     const form = useForm({
@@ -53,6 +56,11 @@ export default function SignUp() {
                 path: '/',
                 maxAge: 18000,
             });
+            setCookie(null, 'user', JSON.stringify(data.data.user), {
+                path: '/',
+                maxAge: 18000,
+            });
+
             navigate('/');
         },
     })
@@ -124,11 +132,19 @@ export default function SignUp() {
                         />
                         <TextInput
                             // withAsterisk
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             label="Password"
                             placeholder="***********"
                             key={form.key('password')}
                             {...form.getInputProps('password')}
+                            rightSection={
+                                <FaRegEye
+                                    aria-label="Clear input"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    // style={{ cursor: 'pointer' }}
+                                />
+                            }
+
                         />
 
                         <Group justify="flex-end" mt="md">

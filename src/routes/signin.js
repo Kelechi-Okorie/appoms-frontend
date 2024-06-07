@@ -9,11 +9,12 @@ import {
     AlertDescription,
 } from '@chakra-ui/react'
 import { Button, Group, TextInput } from '@mantine/core';
+import { FaRegEye } from "react-icons/fa";
 import {
     Box,
     Text
 } from '@mantine/core';
-import classes from './HeaderMegaMenu.module.css';
+import classes from '../styles/HeaderMegaMenu.module.css';
 
 import { useForm } from '@mantine/form';
 import axios from 'axios';
@@ -37,15 +38,15 @@ export const postLogin = async ({ email, password }) => {
 export default function SignIn() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
 
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = getToken();
-        console.log(token);
         if (token) {
-            navigate('/dashboard');
+            navigate('/user/profile');
         }
     }, [navigate]);
 
@@ -70,7 +71,12 @@ export default function SignIn() {
                 maxAge: 18000,
             });
 
-            navigate('/dashboard')
+            setCookie(null, 'user', JSON.stringify(data.data.user), {
+                path: '/',
+                maxAge: 18000,
+            });
+
+            navigate('/')
         },
         onError: (error) => {
             console.log('has failed', error);
@@ -135,11 +141,18 @@ export default function SignIn() {
                         />
                         <TextInput
                             // withAsterisk
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             label="Password"
                             placeholder="***********"
                             key={form.key('password')}
                             {...form.getInputProps('password')}
+                            rightSection={
+                                <FaRegEye
+                                    aria-label="Clear input"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    // style={{ cursor: 'pointer' }}
+                                />
+                            }
                         />
 
                         <Group justify="flex-end" mt="md">
